@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Player Behavior Risk Analyzer</title>
+</head>
+
+<body>
+
+    <h1>Player Behavior Risk Analyzer</h1>
+
+    <h2>Churn Prediction</h2>
+
+    <form action="/predict" method="POST">
+
+        <label>Player ID:</label>
+        <input type="text" name="player_id" required><br><br>
+
+        <label>Matches Played:</label>
+        <input type="number" name="matches" required><br><br>
+
+        <label>Average Session Minutes:</label>
+        <input type="number" name="session" required><br><br>
+
+        <label>Days Since Last Login:</label>
+        <input type="number" name="days" required><br><br>
+
+        <label>Average Kills:</label>
+        <input type="number" name="kills" required><br><br>
+
+        <label>Win Rate:</label>
+        <input type="number" step="0.01" name="winrate" required><br><br>
+
+        <button type="submit">Predict Churn</button>
+
+    </form>
+
+    {% if churn_result %}
+
+    <h3>Churn Result</h3>
+
+    <p>Player: {{ player_id }}</p>
+    <p>{{ churn_result }}</p>
+    <p>Churn Probability: {{ churn_probability }}%</p>
+
+    {% endif %}
+
+
+    <hr>
+
+
+    <h2>Toxicity Detection</h2>
+
+    <form action="/toxicity" method="POST">
+
+        <label>Player ID:</label>
+        <input type="text" name="player_id" required><br><br>
+
+        <label>Chat Message:</label><br>
+        <textarea name="message" rows="4" cols="40" required></textarea><br><br>
+
+        <button type="submit">Check Toxicity</button>
+
+    </form>
+
+
+    {% if toxicity_result %}
+
+    <h3>Toxicity Result</h3>
+
+    <p>Player: {{ player_id }}</p>
+
+    {% if toxicity_result.toxic %}
+        <p>⚠️ Toxic Message Detected</p>
+        <p>Detected Words: {{ toxicity_result.words }}</p>
+    {% else %}
+        <p>✅ No Toxicity Detected</p>
+    {% endif %}
+
+    {% if combined_risk is not none %}
+        <h3>Combined Player Risk: {{ combined_risk }}%</h3>
+    {% endif %}
+
+    {% endif %}
+
+</body>
+</html>
